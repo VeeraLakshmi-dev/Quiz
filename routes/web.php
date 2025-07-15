@@ -16,10 +16,10 @@ Route::get('/admin/register', [AdminAuthController::class, 'showRegister'])->nam
 Route::post('/admin/register', [AdminAuthController::class, 'register']);
 Route::post('/admin/logout', [AdminAuthController::class, 'logout'])->name('admin.logout');
 
-// Admin Dashboard
 Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
     Route::get('/dashboard', [AdminAuthController::class, 'dashboard'])->name('admin.dashboard');
 });
+
 Route::get('/dashboard', function () {
     return redirect()->route('quiz');
 })->middleware(['auth', 'verified']);
@@ -36,7 +36,7 @@ Route::middleware(['auth', 'user'])->group(function () {
     Route::post('/quiz/submit', [QuizController::class, 'submit'])->name('quiz.submit');
 });
 
-// Thank you and submitted pages
+// Thank you and 
 Route::get('/thank-you', function () {
     return view('thank-you');
 })->name('thank-you');
