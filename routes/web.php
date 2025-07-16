@@ -36,7 +36,7 @@ Route::middleware(['auth', 'user'])->group(function () {
     Route::post('/quiz/submit', [QuizController::class, 'submit'])->name('quiz.submit');
 });
 
-// Thank you and 
+// Thank you and submitted pages
 Route::get('/thank-you', function () {
     return view('thank-you');
 })->name('thank-you');
