@@ -71,6 +71,8 @@ class AdminAuthController extends Controller
                     ->latest('submitted_at');
             }])
             ->whereHas('quizSubmissions')
+            ->withMax('quizSubmissions', 'submitted_at')
+            ->orderByDesc('quiz_submissions_max_submitted_at')
             ->get();
 
         return view('admin.dashboard', compact('users'));

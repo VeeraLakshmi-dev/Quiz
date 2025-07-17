@@ -3,22 +3,24 @@
 @section('content')
 <div class="container mt-5">
     <div class="card p-4 shadow">
-        <h2 class="mb-4">🎓 Quiz Attended Users</h2>
+       <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2 class="mb-0">🎓 Quiz Attended Users</h2>
 
-        <form method="POST" action="{{ route('admin.logout') }}" class="mb-4">
-            @csrf
-            <button type="submit" class="btn btn-danger">Logout</button>
-        </form>
+            <form method="POST" action="{{ route('admin.logout') }}">
+                @csrf
+                <button type="submit" class="btn btn-danger">Logout</button>
+            </form>
+        </div>
 
         @if($users->count())
-            <table id="quizTable" class="table table-bordered table-hover table-striped">
-                <thead class="table-dark text-center">
-                    <tr>
+            <table id="quizTable" class="table table-bordered table-hover table-striped mt-5">
+                <thead>
+                    <tr class="text-center">
                         <th>#</th>
                         <th>Name</th>
                         <th>Email</th>
-                        <th>Mobile Number</th>
-                        <th>Total Correct Answers</th>
+                        <th style="white-space: nowrap;">Mobile Number</th>
+                        <th style="white-space: nowrap;">Total Correct Answers</th>
                         <th>Time Taken</th>
                         <th>Submitted At</th>
                     </tr>
