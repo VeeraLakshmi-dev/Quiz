@@ -40,7 +40,7 @@ public function show()
 
             return redirect('/thank-you')->with('message', 'Time expired. You are locked out.');
         }
-
+ 
         foreach ($answers as $questionId => $selectedKey) {
             $question = Question::find($questionId);
 
