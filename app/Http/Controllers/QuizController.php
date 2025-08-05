@@ -7,14 +7,25 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\Question;
 use App\Models\User;
 use App\Models\QuizSubmission;
+use Illuminate\Support\Facades\DB;
 
 class QuizController extends Controller
 {
-    public function show()
-    {
-        $questions = Question::inRandomOrder()->limit(20)->get();
-        return view('quiz', compact('questions'));
-    }
+public function show()
+{
+    $questions = DB::table('questions')
+        ->select('id', 'question', 'option_a', 'option_b', 'option_c', 'option_d', 'correct_answer')
+        ->whereIn('id', function ($query) {
+            $query->selectRaw('MIN(id)')
+                ->from('questions')
+                ->groupBy('question');
+        })
+        ->inRandomOrder()
+        ->limit(20)
+        ->get();
+
+    return view('quiz', compact('questions'));
+}
 
     public function submit(Request $request)
     {
@@ -36,7 +47,7 @@ class QuizController extends Controller
             if (!$question) continue;
 
             $correctKey = $question->correct_answer;
-            $isCorrect = $selectedKey === $correctKey ? 1 : 0;
+            $isCorrect = strtolower($selectedKey) == strtolower($correctKey) ? 1 : 0;
 
             QuizSubmission::create([
                 'user_id'         => $userId,
