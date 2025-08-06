@@ -45,4 +45,6 @@ Route::get('/submitted', function () {
     return view('submitted');
 })->name('submitted');
 
+Route::get('/quiz/timeout', [QuizController::class, 'timeout'])->name('quiz.timeout');
+
 require __DIR__.'/auth.php';

@@ -11,21 +11,30 @@ use Illuminate\Support\Facades\DB;
 
 class QuizController extends Controller
 {
-public function show()
-{
-    $questions = DB::table('questions')
-        ->select('id', 'question', 'option_a', 'option_b', 'option_c', 'option_d', 'correct_answer')
-        ->whereIn('id', function ($query) {
-            $query->selectRaw('MIN(id)')
-                ->from('questions')
-                ->groupBy('question');
-        })
-        ->inRandomOrder()
-        ->limit(20)
-        ->get();
+    public function show()
+    {
+        $questions = DB::table('questions')
+            ->select('id', 'question', 'option_a', 'option_b', 'option_c', 'option_d', 'correct_answer')
+            ->whereIn('id', function ($query) {
+                $query->selectRaw('MIN(id)')
+                    ->from('questions')
+                    ->groupBy('question');
+            })
+            ->inRandomOrder()
+            ->limit(20)
+            ->get();
 
-    return view('quiz', compact('questions'));
-}
+        return view('quiz', compact('questions'));
+    }
+
+    public function timeout()
+    {
+        $userId = auth()->id();
+        if($userId){
+            User::where('id', $userId)->update(['can_login' => false]);
+        }
+        return view('timeout');
+    }
 
     public function submit(Request $request)
     {
@@ -40,7 +49,7 @@ public function show()
 
             return redirect('/thank-you')->with('message', 'Time expired. You are locked out.');
         }
- 
+
         foreach ($answers as $questionId => $selectedKey) {
             $question = Question::find($questionId);
 

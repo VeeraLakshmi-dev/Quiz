@@ -38,6 +38,18 @@
     </div>
 </div>
 <script>
+    const isReload = (
+        performance.navigation.type === 1 ||
+        performance.getEntriesByType("navigation")[0]?.type === "reload"
+    );
+
+    if (isReload) {
+        localStorage.setItem('quiz_exited', '1'); 
+        window.location.href = "{{ route('quiz.timeout') }}";
+    }
+</script>
+
+<script>
     const TOTAL_TIME = 10 * 60; // 600 seconds (10 min)
     const STORAGE_KEY = 'quiz_start_time';
     let quizSubmitted = false;
