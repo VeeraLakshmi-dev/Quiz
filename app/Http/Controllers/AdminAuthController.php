@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
 use App\Models\QuizSubmission;
-use Hash;
+use Illuminate\Support\Facades\Hash;
 
 class AdminAuthController extends Controller
 {
@@ -66,10 +66,13 @@ class AdminAuthController extends Controller
                     $query->where('is_correct', 1);
                 }
             ])
-            ->with(['quizSubmissions' => function ($query) {
-                $query->select('id','user_id', 'time_taken','submitted_at')
-                    ->latest('submitted_at');
-            }])
+            ->with([
+                'quizSubmissions' => function ($query) {
+                    $query->select('id', 'user_id', 'time_taken', 'submitted_at')
+                        ->latest('submitted_at');
+                },
+                'colleges' 
+            ])
             ->whereHas('quizSubmissions')
             ->withMax('quizSubmissions', 'submitted_at')
             ->orderByDesc('quiz_submissions_max_submitted_at')
@@ -77,4 +80,5 @@ class AdminAuthController extends Controller
 
         return view('admin.dashboard', compact('users'));
     }
+
 }

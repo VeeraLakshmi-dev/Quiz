@@ -49,5 +49,10 @@ class User extends Authenticatable
     {
         return $this->hasMany(\App\Models\QuizSubmission::class);
     }
+    
+    public function colleges()
+    {
+        return $this->belongsToMany(College::class, 'college_user', 'user_id', 'college_id');
+    }
 
 }

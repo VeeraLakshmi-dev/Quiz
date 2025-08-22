@@ -20,6 +20,7 @@
                         <th>Name</th>
                         <th>Email</th>
                         <th style="white-space: nowrap;">Mobile Number</th>
+                        <th>College</th>
                         <th style="white-space: nowrap;">Total Correct Answers</th>
                         <th>Time Taken</th>
                         <th>Submitted At</th>
@@ -35,7 +36,16 @@
                             <td>{{ $user->name }}</td>
                             <td>{{ $user->email }}</td>
                             <td>{{ $user->mobile_number }}</td>
-                            <td>{{ $user->correct_answers }}</td>
+                            <td>
+                                @if($user->colleges->count())
+                                    @foreach($user->colleges as $college)
+                                        {{ $college->college_name }}<br>
+                                    @endforeach
+                                @else
+                                    <span class="text-muted">N/A</span>
+                                @endif
+                            </td>
+                            <td>{{ $user->correct_answers ?? 0}}</td>
                             <td>
                                 @if($submission && $submission->time_taken)
                                     @php
@@ -66,7 +76,26 @@
 @push('scripts')
 <script>
     $(document).ready(function() {
-        $('#quizTable').DataTable();
+        let table = $('#quizTable').DataTable({
+            dom: 'Bfrtip',
+            buttons: [
+                {
+                    extend: 'excelHtml5',
+                    text: '📥 Export to Excel',
+                    className: 'btn btn-success',
+                    exportOptions: {
+                        modifier: {
+                            search: 'applied'
+                        }
+                    },
+                    action: function (e, dt, button, config) {
+                        if (confirm("Are you sure you want to export this data to Excel?")) {
+                            $.fn.dataTable.ext.buttons.excelHtml5.action.call(this, e, dt, button, config);
+                        }
+                    }
+                }
+            ]
+        });
     });
 </script>
 @endpush

@@ -44,7 +44,7 @@
     );
 
     if (isReload) {
-        localStorage.setItem('quiz_exited', '1'); 
+        localStorage.setItem('quiz_exited', '1');
         window.location.href = "{{ route('quiz.timeout') }}";
     }
 </script>

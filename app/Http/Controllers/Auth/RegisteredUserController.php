@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules;
 use Illuminate\View\View;
+use App\Models\College;
 
 class RegisteredUserController extends Controller
 {
@@ -20,7 +21,8 @@ class RegisteredUserController extends Controller
      */
     public function create(): View
     {
-        return view('auth.register');
+        $colleges = College::all(); // fetch all colleges
+        return view('auth.register', compact('colleges'));
     }
 
     /**
@@ -35,6 +37,7 @@ class RegisteredUserController extends Controller
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'mobile_number' => 'required|string|max:15|unique:users,mobile_number',
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
+            'college_id' => ['required', 'exists:colleges,id'],
         ]);
 
         $user = User::create([
@@ -48,6 +51,8 @@ class RegisteredUserController extends Controller
 
         event(new Registered($user));
 
+        $user->colleges()->attach($request->college_id);
+        
         Auth::login($user);
 
         return redirect()->route('quiz');

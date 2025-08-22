@@ -22,6 +22,18 @@
             <x-text-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')" required autocomplete="username" />
             <x-input-error :messages="$errors->get('email')" class="mt-2" />
         </div>
+        
+        <!-- College -->
+        <div class="mt-4">
+            <x-input-label for="college_id" :value="__('College')" />
+            <select id="college_id" name="college_id" class="block mt-1 w-full" required>
+                <option value="">-- Select College --</option>
+                @foreach($colleges as $college)
+                    <option value="{{ $college->id }}">{{ $college->college_name }}</option>
+                @endforeach
+            </select>
+            <x-input-error :messages="$errors->get('college_id')" class="mt-2" />
+        </div>
 
         <!-- Password -->
         <div class="mt-4">
